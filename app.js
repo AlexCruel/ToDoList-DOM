@@ -129,7 +129,8 @@ const tasks = [
     renderAllTasks(objOfTasks);
     form.addEventListener('submit', onFormSubmitHandler);
     listContainer.addEventListener('click', onDeletehandler);
-    themeSelect.addEventListener('change', onThemeSelectHandler)
+    listContainer.addEventListener('click', onCompletehandler);
+    themeSelect.addEventListener('change', onThemeSelectHandler);
 
     isTaskNull()
 
@@ -244,7 +245,14 @@ const tasks = [
             deleteTaskFromHtml(confirmed, parent);
         }
     }
-
+    
+    function onCompletehandler({ target }) {
+        if (target.classList.contains('complete-btn')) {
+            const parent = target.closest('[data-task-id]');
+            parent.style.backgroundColor = '#B3EAAF';
+        }
+    }
+    
     // Themes
     function onThemeSelectHandler(e) {
         const selectedTheme = themeSelect.value
