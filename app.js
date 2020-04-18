@@ -99,6 +99,23 @@ const tasks = [
     };
     let lastSelectedTheme = 'default'
 
+    function isTaskNull() {
+        if (Object.keys(objOfTasks).length == 0) {
+            const p = document.createElement('p')
+            p.textContent = 'Список задач пуст. Добавьте новое задание прямо сейчас!'
+            p.classList.add('alert', 'alert-danger')
+            p.setAttribute('id', 'nullList')
+            p.setAttribute('role', 'alert')
+            p.style.textAlign = 'center'
+            listContainer.appendChild(p)
+        } else {
+            if (document.getElementById('nullList')) {
+                const p = document.getElementById('nullList')
+                p.parentNode.removeChild(p)
+            }
+        }
+    }
+
     // Elemnts UI
     const listContainer = document.querySelector(
         '.tasks-list-section .list-group',
@@ -113,6 +130,8 @@ const tasks = [
     form.addEventListener('submit', onFormSubmitHandler);
     listContainer.addEventListener('click', onDeletehandler);
     themeSelect.addEventListener('change', onThemeSelectHandler)
+
+    isTaskNull()
 
     function renderAllTasks(tasksList) {
         if (!tasksList) {
@@ -154,10 +173,15 @@ const tasks = [
         const article = document.createElement('p');
         article.textContent = body;
         article.classList.add('mt-2', 'w-100');
+        
+        const completeBtn = document.createElement('button')
+        completeBtn.textContent = 'Complete'
+        completeBtn.classList.add('btn', 'btn-success', 'mr-auto', 'complete-btn')
 
         li.appendChild(span);
         li.appendChild(deleteBtn);
         li.appendChild(article);
+        li.appendChild(completeBtn)
 
         return li;
     }
@@ -176,6 +200,7 @@ const tasks = [
         const listItem = listItemTemplate(task);
         listContainer.insertAdjacentElement('afterbegin', listItem);
         form.reset();
+        isTaskNull()
     }
 
     function createNewTask(title, body) {
@@ -206,6 +231,7 @@ const tasks = [
     function deleteTaskFromHtml(confirmed, el) {
         if (!confirmed) return;
         el.remove();
+        isTaskNull()
     }
 
     function onDeletehandler({
@@ -219,6 +245,7 @@ const tasks = [
         }
     }
 
+    // Themes
     function onThemeSelectHandler(e) {
         const selectedTheme = themeSelect.value
         const isConfirmed = confirm(`Сменить тему?: ${selectedTheme}`)
@@ -237,24 +264,3 @@ const tasks = [
         })
     }
 })(tasks);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
